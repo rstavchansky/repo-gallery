@@ -10,6 +10,12 @@ const reposSection = document.querySelector(".repos");
 // select the element to display individual repo information
 const singleRepo = document.querySelector(".repo-data");
 
+// select the button to go back to the full repos list
+const back = document.querySelector(".view-repos");
+
+// select input to filter with
+const filter = document.querySelector(".filter-repos");
+
 // define GitHub username
 const username = "rstavchansky";
 
@@ -49,6 +55,7 @@ const getRepoInfo = async function () {
 
 // show repo information
 const showRepos = function (repoData) {
+    filter.classList.remove("hide");
     for (const repo of repoData) {
         const repoInfoLi = document.createElement("li");
         repoInfoLi.classList.add("repo");
@@ -92,4 +99,29 @@ const showSingleRepo = function (repoInfo, languages) {
     <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>`;
     singleRepo.append(singleRepoInfo);
     reposSection.classList.add("hide");
+    back.classList.remove("hide");
 };
+
+// adds event listener to Back button to "go back"
+back.addEventListener("click", function () {
+    reposSection.classList.remove("hide")
+    singleRepo.classList.add("hide");
+    back.classList.add("hide");
+});
+
+// filter functionality
+filter.addEventListener("input", function (e) {
+    const searchText = e.target.value;
+    //console.log(search);
+    const repos = document.querySelectorAll(".repo");
+    const searchLowerText = searchText.toLowerCase();
+
+    for (const repo of repos) {
+        const repoLowerText = repo.innerText.toLowerCase();
+        if (repoLowerText.includes(searchLowerText)) {
+            repo.classList.remove("hide");
+        } else {
+            repo.classList.add("hide");
+        }
+    }
+});
